@@ -1,0 +1,31 @@
+@import '@/styles/variables';
+
+.banner {
+	.title {
+		font-weight: 900;
+		.title1 {
+			color: $color-white;
+
+			margin-bottom: -2.5rem;
+		}
+		.title2 {
+			color: $text-purple-dark;
+		}
+	}
+	.subtext {
+		color: $text-white-100;
+	}
+	.btn {
+		color: $color-white;
+		border: none;
+		background-color: $text-purple;
+		font-size: 1.6rem;
+		padding: 1.5rem 3rem;
+
+		cursor: pointer;
+		transition: all 0.2s ease-in;
+		&:hover {
+			background-color: $text-purple-dark;
+		}
+	}
+}

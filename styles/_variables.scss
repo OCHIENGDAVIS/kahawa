@@ -1,0 +1,20 @@
+// ! COLORS
+$color-text: #373b64;
+$color-white: #fff;
+$text-purple: rgba(67, 56, 202, 1);
+$text-purple-dark: rgba(79, 70, 229, 1);
+$text-black: rgba(17, 24, 39, 1);
+$text-white-100: rgba(222, 231, 232, 1);
+
+//! FONT
+$font-family: 'Montserrat', sans-serif;
+
+//! BREAKPOINTS
+$sm: 40em; // 640px: small
+$md: 48em; // 768px: medium
+$lg: 64em; // 1024px: large
+$xl: 80em; // 1280px: extra large
+$xl-2: 96em; // 1536:  2 * extra large
+
+// ! BORDER RADIUS
+$border-radius: 12px;
