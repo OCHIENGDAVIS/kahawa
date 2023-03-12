@@ -1,6 +1,7 @@
 @import '@/styles/variables';
 
 .banner {
+	margin-bottom: 12rem;
 	.title {
 		font-weight: 900;
 		.title1 {
@@ -20,7 +21,6 @@
 		background-color: $text-purple;
 		font-size: 1.6rem;
 		padding: 1.5rem 3rem;
-
 		cursor: pointer;
 		transition: all 0.2s ease-in;
 		&:hover {

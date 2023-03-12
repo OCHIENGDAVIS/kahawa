@@ -2,10 +2,13 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 import Banner from '@/components/banner/Banner';
+import Card from '@/components/card/Card';
+
+import { getAllStores } from '@/data/coffeee';
 
 import classes from '@/styles/Home.module.scss';
 
-export default function Home() {
+export default function Home({ stores }) {
 	function handleBtnClick() {
 		console.log('banner button');
 	}
@@ -37,8 +40,29 @@ export default function Home() {
 							height={400}
 						/>
 					</div>
+					{stores &&
+						stores.map((store) => {
+							return (
+								<Card
+									id={store.id}
+									key={store.id}
+									name={store.name}
+									url={store.imgUrl}
+									href={store.websiteUrl}
+								/>
+							);
+						})}
 				</div>
 			</main>
 		</>
 	);
+}
+
+export function getStaticProps(context) {
+	const stores = getAllStores();
+	return {
+		props: {
+			stores,
+		},
+	};
 }
