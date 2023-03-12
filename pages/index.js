@@ -1,8 +1,9 @@
 import Head from 'next/head';
+import Image from 'next/image';
 
 import Banner from '@/components/banner/Banner';
 
-import styles from '@/styles/Home.module.scss';
+import classes from '@/styles/Home.module.scss';
 
 export default function Home() {
 	function handleBtnClick() {
@@ -22,11 +23,21 @@ export default function Home() {
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<main className={styles.home}>
-				<Banner
-					btnText="view stores nearby"
-					btnHandler={handleBtnClick}
-				/>
+			<main className={classes.home}>
+				<div className={classes.container}>
+					<Banner
+						btnText="view stores nearby"
+						btnHandler={handleBtnClick}
+					/>
+					<div className={classes.heroImage}>
+						<Image
+							src="/images/site/hero-image.png"
+							alt="image of a women enjoying coffee"
+							width={700}
+							height={400}
+						/>
+					</div>
+				</div>
 			</main>
 		</>
 	);

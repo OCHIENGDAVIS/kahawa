@@ -1,2 +1,17 @@
 .home {
+	max-width: 80%;
+	padding: 0 1rem;
+	margin: 0 auto;
+	position: relative;
+
+	.container {
+		margin-top: 4rem;
+		padding: 7.5rem;
+	}
+	.heroImage {
+		position: absolute;
+		left: 15rem;
+		top: -5rem;
+		z-index: 1;
+	}
 }
