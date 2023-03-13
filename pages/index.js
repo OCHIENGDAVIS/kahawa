@@ -5,11 +5,12 @@ import Banner from '@/components/banner/Banner';
 import Card from '@/components/card/Card';
 
 import { getStores } from '@/lib/coffee-store';
-import { getAllStores } from '@/data/coffeee-mock';
+import { getAllStores, getStorePhotos } from '@/data/coffeee-mock';
 
 import classes from '@/styles/Home.module.scss';
 
 export default function Home({ stores }) {
+	console.log(stores);
 	function handleBtnClick() {
 		console.log('banner button');
 	}
@@ -42,14 +43,14 @@ export default function Home({ stores }) {
 						/>
 					</div>
 					{stores &&
-						stores.map((store) => {
+						stores.map((store, index) => {
 							return (
 								<Card
 									id={store.fsq_id}
 									key={store.fsq_id}
 									name={store.name}
 									url={
-										store.imgUrl ||
+										store.images[0] ||
 										'https://images.unsplash.com/photo-1469631423273-6995642a6a40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=903&q=80'
 									}
 								/>
@@ -63,7 +64,6 @@ export default function Home({ stores }) {
 
 export async function getStaticProps(context) {
 	const stores = await getAllStores();
-	console.log(stores);
 	if (!stores) {
 		return {
 			props: {

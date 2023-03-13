@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { getStores, getOneStore } from '@/lib/coffee-store';
 import { getAllStores, getStoreById } from '@/data/coffeee-mock';
 
 export default function CoffeeStoreIndexPage({ store }) {
@@ -17,7 +16,7 @@ export default function CoffeeStoreIndexPage({ store }) {
 			<h1>{store.name}</h1>
 			<Image
 				src={
-					store.imgUrl ||
+					store.images[1] ||
 					'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'
 				}
 				alt={store.name}
@@ -50,12 +49,20 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-	const stores = await getAllStores();
-	const paths = stores.map((store) => ({
-		params: { storeId: String(store.id) },
-	}));
-	return {
-		paths,
-		fallback: true,
-	};
+	try {
+		const stores = await getAllStores();
+		const paths = stores.map((store) => ({
+			params: { storeId: String(store.id) },
+		}));
+		return {
+			paths,
+			fallback: true,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			paths: [],
+			fallback: false,
+		};
+	}
 }

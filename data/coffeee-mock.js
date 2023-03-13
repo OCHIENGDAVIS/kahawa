@@ -1,3 +1,9 @@
+import { createApi } from 'unsplash-js';
+
+const unsplash = createApi({
+	accessKey: process.env.UNSPLASH_ACCESS_KEY,
+});
+
 const stores = [
 	{
 		fsq_id: '55f56712498e107464613d32',
@@ -146,11 +152,50 @@ const stores = [
 	},
 ];
 
+export async function getStorePhotos() {
+	try {
+		const photos = await unsplash.search.getPhotos({
+			query: 'Coffee photos',
+			page: 1,
+			perPage: 10,
+		});
+		const unsplashResults = photos.response.results;
+		return unsplashResults;
+	} catch (error) {
+		console.log(error);
+		throw new Error(error.message);
+	}
+}
+
 export async function getAllStores() {
-	return await stores;
+	try {
+		let photos = await getStorePhotos();
+		photos = photos.map((photo) => [
+			photo.urls['small'],
+			photo.urls['regular'],
+		]);
+		const coffeeStores = stores.map((store, index) => ({
+			...store,
+			images: photos[index],
+		}));
+		return coffeeStores;
+	} catch (error) {
+		console.log(error);
+		throw new Error(error);
+	}
 }
 
 export async function getStoreById(id) {
-	const store = await stores.find((item) => item.fsq_id === id);
+	let photos = await getStorePhotos();
+	photos = photos.map((photo) => [
+		photo.urls['small'],
+		photo.urls['regular'],
+	]);
+	const coffeeStores = stores.map((store, index) => ({
+		...store,
+		images: photos[index],
+	}));
+
+	const store = await coffeeStores.find((item) => item.fsq_id === id);
 	return store;
 }
