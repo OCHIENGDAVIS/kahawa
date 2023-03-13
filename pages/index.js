@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Banner from '@/components/banner/Banner';
 import Card from '@/components/card/Card';
 
-import { getAllStores } from '@/data/coffeee';
+import { getStores } from '@/lib/coffee-store';
+import { getAllStores } from '@/data/coffeee-mock';
 
 import classes from '@/styles/Home.module.scss';
 
@@ -44,11 +45,13 @@ export default function Home({ stores }) {
 						stores.map((store) => {
 							return (
 								<Card
-									id={store.id}
-									key={store.id}
+									id={store.fsq_id}
+									key={store.fsq_id}
 									name={store.name}
-									url={store.imgUrl}
-									href={store.websiteUrl}
+									url={
+										store.imgUrl ||
+										'https://images.unsplash.com/photo-1469631423273-6995642a6a40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=903&q=80'
+									}
 								/>
 							);
 						})}
@@ -58,8 +61,16 @@ export default function Home({ stores }) {
 	);
 }
 
-export function getStaticProps(context) {
-	const stores = getAllStores();
+export async function getStaticProps(context) {
+	const stores = await getAllStores();
+	console.log(stores);
+	if (!stores) {
+		return {
+			props: {
+				stores: null,
+			},
+		};
+	}
 	return {
 		props: {
 			stores,
