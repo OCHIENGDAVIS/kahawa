@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import Head from 'next/head';
 import Image from 'next/image';
 
@@ -5,15 +7,40 @@ import Banner from '@/components/banner/Banner';
 import Card from '@/components/card/Card';
 
 import { getStores } from '@/lib/coffee-store';
-import { getAllStores, getStorePhotos } from '@/data/coffeee-mock';
+import { getAllStores } from '@/data/coffeee-mock';
+import useTrackLocation from '@/hooks/use-track-location';
 
 import classes from '@/styles/Home.module.scss';
 
 export default function Home({ stores }) {
-	console.log(stores);
+	const [coffeeStores, setCoffeeStores] = useState();
+	const [error, setError] = useState('');
+	const {
+		handleTrackLocation,
+		latLong,
+		isFindingLocation,
+		locationErrorMessage,
+	} = useTrackLocation();
+	useEffect(() => {
+		async function fetchData() {
+			if (latLong) {
+				try {
+					const fetchedStores = await getStores(latLong, 20);
+					console.log(fetchedStores);
+					setCoffeeStores(fetchedStores);
+				} catch (error) {
+					console.log(error);
+					setError(error.message || 'something went wrong');
+				}
+			}
+		}
+		fetchData();
+	}, [latLong]);
+
 	function handleBtnClick() {
-		console.log('banner button');
+		handleTrackLocation();
 	}
+	const btnText = isFindingLocation ? 'Loading...' : 'view stores nearby';
 	return (
 		<>
 			<Head>
@@ -30,10 +57,10 @@ export default function Home({ stores }) {
 			</Head>
 			<main className={classes.home}>
 				<div className={classes.container}>
-					<Banner
-						btnText="view stores nearby"
-						btnHandler={handleBtnClick}
-					/>
+					<Banner btnText={btnText} btnHandler={handleBtnClick} />
+					{locationErrorMessage && (
+						<p>Something went wrong: {locationErrorMessage}</p>
+					)}
 					<div className={classes.heroImage}>
 						<Image
 							src="/images/site/hero-image.png"
@@ -42,8 +69,9 @@ export default function Home({ stores }) {
 							height={400}
 						/>
 					</div>
-					{stores &&
-						stores.map((store, index) => {
+					{error && <p>error</p>}
+					{coffeeStores &&
+						coffeeStores.map((store) => {
 							return (
 								<Card
 									id={store.fsq_id}

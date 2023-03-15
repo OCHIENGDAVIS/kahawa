@@ -1,7 +1,7 @@
 import { createApi } from 'unsplash-js';
 
 const unsplash = createApi({
-	accessKey: process.env.UNSPLASH_ACCESS_KEY,
+	accessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY,
 });
 
 const stores = [
@@ -157,7 +157,7 @@ export async function getStorePhotos() {
 		const photos = await unsplash.search.getPhotos({
 			query: 'Coffee photos',
 			page: 1,
-			perPage: 10,
+			perPage: 35,
 		});
 		const unsplashResults = photos.response.results;
 		return unsplashResults;
