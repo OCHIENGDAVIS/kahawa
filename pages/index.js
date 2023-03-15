@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 import Head from 'next/head';
 import Image from 'next/image';
@@ -10,24 +10,30 @@ import { getStores } from '@/lib/coffee-store';
 import { getAllStores } from '@/data/coffeee-mock';
 import useTrackLocation from '@/hooks/use-track-location';
 
+import { StoreContext } from '@/state/store.context';
+
 import classes from '@/styles/Home.module.scss';
+import { SET_COFFEE_STORES } from '@/state/action-types';
 
 export default function Home({ stores }) {
-	const [coffeeStores, setCoffeeStores] = useState();
-	const [error, setError] = useState('');
+	const { dispatch, state } = useContext(StoreContext);
 	const {
-		handleTrackLocation,
-		latLong,
-		isFindingLocation,
-		locationErrorMessage,
-	} = useTrackLocation();
+		coffeeStores,
+		latLong: { lat, lng },
+	} = state;
+	const [error, setError] = useState('');
+	const { handleTrackLocation, isFindingLocation, locationErrorMessage } =
+		useTrackLocation();
 	useEffect(() => {
 		async function fetchData() {
-			if (latLong) {
+			if (lat && lng) {
 				try {
-					const fetchedStores = await getStores(latLong, 20);
-					console.log(fetchedStores);
-					setCoffeeStores(fetchedStores);
+					const fetchedStores = await getStores({ lat, lng }, 20);
+
+					dispatch({
+						type: SET_COFFEE_STORES,
+						payload: { coffeeStores: fetchedStores },
+					});
 				} catch (error) {
 					console.log(error);
 					setError(error.message || 'something went wrong');
@@ -35,7 +41,7 @@ export default function Home({ stores }) {
 			}
 		}
 		fetchData();
-	}, [latLong]);
+	}, [lat, lng]);
 
 	function handleBtnClick() {
 		handleTrackLocation();
@@ -91,7 +97,7 @@ export default function Home({ stores }) {
 }
 
 export async function getStaticProps(context) {
-	const stores = await getAllStores();
+	const stores = await getStores();
 	if (!stores) {
 		return {
 			props: {

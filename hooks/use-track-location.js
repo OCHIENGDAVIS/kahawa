@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
+import { StoreContext } from '@/state/store.context';
+import { SET_LAT_LONG } from '@/state/action-types';
 
 export default function useTrackLocation() {
+	const { dispatch } = useContext(StoreContext);
 	const [locationErrorMessage, setLocationErrorMessage] = useState('');
-	const [latLong, setLatLong] = useState(null);
+	// const [latLong, setLatLong] = useState(null);
 	const [isFindingLocation, setIsFindingLocation] = useState(false);
 
 	const success = (position) => {
@@ -10,7 +14,11 @@ export default function useTrackLocation() {
 		const { latitude, longitude } = coords;
 
 		setLocationErrorMessage('');
-		setLatLong({ lat: latitude, lng: longitude });
+		// setLatLong({ lat: latitude, lng: longitude });
+		dispatch({
+			type: SET_LAT_LONG,
+			payload: { lat: latitude, lng: longitude },
+		});
 		setIsFindingLocation(false);
 	};
 	const error = () => {
@@ -30,7 +38,7 @@ export default function useTrackLocation() {
 	};
 
 	return {
-		latLong,
+		// latLong,
 		isFindingLocation,
 		handleTrackLocation,
 		locationErrorMessage,
