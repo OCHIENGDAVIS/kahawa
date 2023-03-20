@@ -20,6 +20,29 @@ export default function CoffeeStoreIndexPage({ store }) {
 
 	const { location } = coffeeStore;
 	const { storeId } = query;
+	const handleCreateCoffeeStore = async (store) => {
+		const { fsq_id, name, address, neighborhood, voting, imgUrl } = store;
+		try {
+			const res = await fetch('/api/create-store', {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+				body: JSON.stringify({
+					fsq_id: `${fsq_id}`,
+					name,
+					address,
+					neighborhood,
+					voting: Number(voting),
+					imgUrl,
+				}),
+			});
+			const store = await res.json();
+			console.log(store);
+		} catch (error) {
+			console.log('error creating a coffee store', error);
+		}
+	};
 
 	useEffect(() => {
 		if (isEmpty(store)) {
@@ -28,6 +51,7 @@ export default function CoffeeStoreIndexPage({ store }) {
 					(store) => store.fsq_id === storeId
 				);
 				setCoffeeStore(storeFromState);
+				handleCreateCoffeeStore(storeFromState);
 			}
 		}
 	}, [storeId]);

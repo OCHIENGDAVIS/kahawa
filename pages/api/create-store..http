@@ -1,0 +1,13 @@
+# Creating a new store 
+POST http://localhost:3000/api/create-store
+content-type: application/json
+
+{
+   "fsq_id": "4",
+    "name": "new Name",
+    "address": "new address", 
+    "neighborhood": "some new Neighbohood",
+    "voting": 1000,
+    "imgUrl": "https://localnewimage.com"
+
+}
